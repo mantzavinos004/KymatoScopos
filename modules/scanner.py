@@ -54,7 +54,7 @@ class NetworkScanner:
                     }
                     # only then append this network
                     if network['essid']:
-                        networks.append(nework)
+                        networks.append(network)
             
             # Cleanup the scan file
             if os.path.exists(filename):
