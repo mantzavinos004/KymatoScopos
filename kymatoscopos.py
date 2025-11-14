@@ -6,6 +6,7 @@ from modules.monitor import MonitorManager
 from modules.scanner import NetworkScanner
 #from modules.handshake import HandshakeCapture
 #from modules.cracker import HandshakeCracker
+from modules.storage import StorageManager 
 
 class Kymatoscopos:
     def __init__(self):
@@ -14,6 +15,9 @@ class Kymatoscopos:
 #        self.handshake = HandshakeCapture()
 #        self.cracker = HandshakeCracker()
         self.current_interface = "wlan0"
+        self.storage = StorageManager()
+        self.scanned_networks = []
+        self.selected_target = None
     
     
     def print_banner(self):
@@ -36,6 +40,13 @@ class Kymatoscopos:
         while True:
             self.clear_sceen()
             self.print_banner()
+
+            # Show current status
+            if self.selected_target:
+                print(f"[*] Current target: {self.selected_target['essid']} ({self.selected_target['bssid']})")
+            if self.scanned_networks:
+                print(f"[*] Networks in memory: {len(self.scanned_networks)}")
+
             print("\n" + "="*50)
             print("              MAIN MENU")
             print("="*50)
@@ -120,10 +131,21 @@ class Kymatoscopos:
         duration =input("[?] Scan duration in seconds (default: 10): ").strip()
         duration = int(duration) if duration.isdigit() else 10
         networks = self.scanner.scan(self.current_interface, duration)
+        
         if networks:
+            # Option 1
+            self.scanned_networks = networks
+            print(f"[+] Stored {len(networks)} networks in memory")
+
+            # Option 2
+            saved_file = self.storage.save_scan(networks)    
+            
             print(f"\n[+] Found {len(networks)} networks: ")
+            print("-"*50)
             for i,net in enumerate(networks,1):
-                print(f"    {i}. {net['essid']} - {net['bssid']} - Channel: {net['channel']}")
+                print(f"    {i}. {net['essid']} - {net['bssid']} - Channel: {net['channel']} - Encryption: {net['encryption']}")
+            # Ask if user wants to select a target
+            self.ask_select_target()
         else:
             print("[-] No networks found or scan failed")    
         input("\nPress Enter to continue...")
@@ -139,6 +161,22 @@ class Kymatoscopos:
         print(f"\n[*] Whould install: {', '.join(tools)}")
         print("[*] Actual installation would require sudo privileges")
         input("\nPress Enter to continue...")
+    
+
+
+# Helpers
+    def ask_select_target(self):
+        """ Ask user to select a target from scanned networks """
+        if not self.scanned_networks:
+            return
+        choice = input("\n[?] Select a target number to attack (or Enter to skip): ").strip()
+        if choice and choice.isdigit():
+            idx = int(choice) -1
+            if 0<= idx <len(self.scanned_networks):
+                self.selected_target = self.scanned_networks[idx]
+                print(f"[+] Target selected: {self.selected_target['essid']} ({selected_target['bssid']})")
+            else:
+                print("[-] Invalid selection")
             
 if __name__ == "__main__":
     try:
