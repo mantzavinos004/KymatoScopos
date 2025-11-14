@@ -4,6 +4,9 @@ import csv
 import os
 
 class NetworkScanner:
+    def __init__(self,monitor_manager):
+        self.monitor= monitor_manager
+        
     def scan(self, interface, duration=10):
         """ Scan for nearby wireless networks """
         try:

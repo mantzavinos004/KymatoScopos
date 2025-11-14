@@ -25,7 +25,7 @@ class Kymatoscopos:
 
         Wi-Fi Penetration Testing Framework v1.0
                 Academic Use Only
-                Ascii art
+                Ascii art a
         """
         print(banner)
     
@@ -113,7 +113,7 @@ class Kymatoscopos:
     #3
     def scan_networks(self):
         print("\n[+] Scanning Networks...")
-        if not self.current_interface.endswith('mon'):
+        if not self.monitor.check_monitor_status(self.current_interface):
             print("[-] Please start monitor mode first!")
             input("\nPress Enter to continue...")
             return
