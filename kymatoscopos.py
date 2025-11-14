@@ -3,14 +3,14 @@ import os
 import sys 
 import time 
 from modules.monitor import MonitorManager
-#from modules.scanner import NetworkScanner
+from modules.scanner import NetworkScanner
 #from modules.handshake import HandshakeCapture
 #from modules.cracker import HandshakeCracker
 
 class Kymatoscopos:
     def __init__(self):
         self.monitor = MonitorManager()
-#        self.scanner = NetworkScanner()
+        self.scanner = NetworkScanner()
 #        self.handshake = HandshakeCapture()
 #        self.cracker = HandshakeCracker()
         self.current_interface = "wlan0"
@@ -18,13 +18,14 @@ class Kymatoscopos:
     
     def print_banner(self):
         banner=r"""
-         _  __ _   _ __  __ ___   ___  ___ ___  ___  ____ ____  
- | |/ /| | | |  \/  |_ _| / __|/ __/ _ \/ __|/ ___/ ___| 
- | ' / | |_| | |\/| || |  \__ \ (_| (_) \__ \___ \___ \ 
- |_|\_\  \___/|_|  |_|___| |___/\___\___/|___/____/____/ 
-                         |_|                             
+  _   _   _   _   _   _   _   _   _   _   _   _  
+ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ 
+( K | y | m | a | t | o | S | c | o | p | o | s )
+ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ 
+
         Wi-Fi Penetration Testing Framework v1.0
                 Academic Use Only
+                Ascii art
         """
         print(banner)
     
@@ -88,7 +89,7 @@ class Kymatoscopos:
             else:
                 print("[-] Invalid option! Press Enter to continue.")
                 input()
-            
+    #1        
     def start_monitor_mode(self):
         print("\n[+] Starting Monitor Mode...")
         interface = input("[?] Enter your interface (default: wlan0): ").strip() or "wlan0"
@@ -99,7 +100,44 @@ class Kymatoscopos:
         else:
             print(f"[-] Failed to start monitor mode. Make sure your equipment has monitor mode capabilities")
         input("\nPress Enter to continue...")
-    
+    #2
+    def stop_monitor_mode(self):
+        print("\n[+] Stopping Monitor Mode...")
+        if self.monitor.stop_monitor(self.current_interface):
+            print("[+] Monitor Mode stopped")
+            self.current_interface="wlan0"
+        else:
+            print("[-] Failed to stop monitor mode")
+        input("\nPress Enter to continue...")
+    #3
+    def scan_networks(self):
+        print("\n[+] Scanning Networks...")
+        if not self.current_interface.endswith('mon'):
+            print("[-] Please start monitor mode first!")
+            input("\nPress Enter to continue...")
+            return
+        duration =input("[?] Scan duration in seconds (default: 10): ").strip()
+        duration = int(duration) if duration.isdigit() else 10
+        networks = self.scanner.scan(self.current_interface, duration)
+        if networks:
+            print(f"\n[+] Found {len(networks)} networks: ")
+            for i,net in enumerate(networks,1):
+                print(f"    {i}. {net['essid']} - {net['bssid']} - Channel: {net['channel']}")
+        else:
+            print("[-] No networks found or scan failed")    
+        input("\nPress Enter to continue...")
+    #4
+    def capture_handshake(self):
+        print("\n[+] Handshake Capture")
+        ## TO-DO: implemend handshake.py
+    #5
+    def install_tools(self):
+        print("\n[+] Installing necessary Wireless-Pentest Tools")
+        ## TO-DO: implemend more tools later
+        tools=["aircrack-ng","hashcat","hcxdumptool","reaver"]
+        print(f"\n[*] Whould install: {', '.join(tools)}")
+        print("[*] Actual installation would require sudo privileges")
+        input("\nPress Enter to continue...")
             
 if __name__ == "__main__":
     try:
