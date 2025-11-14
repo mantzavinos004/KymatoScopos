@@ -6,7 +6,7 @@ import os
 class NetworkScanner:
     def __init__(self,monitor_manager):
         self.monitor= monitor_manager
-        
+
     def scan(self, interface, duration=10):
         """ Scan for nearby wireless networks """
         try:
@@ -49,7 +49,7 @@ class NetworkScanner:
                         'bssid': parts[0].strip(),
                         'essid': parts[13].strip(),
                         'channel': parts[3].strip(),
-                        'power': part[8].strip(),
+                        'power': parts[8].strip(),
                         'encryption': parts[5].strip()
                     }
                     # only then append this network
