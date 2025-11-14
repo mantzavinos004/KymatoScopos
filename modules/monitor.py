@@ -36,7 +36,7 @@ class MonitorManager:
             subprocess.run(['sudo','airmon-ng','check','kill'], capture_output= False)
             time.sleep(2)
             subprocess.run(['sudo','ip','link','set',interface,'down'], capture_output=False)
-            subprocess.run(['sudo','iw',interface,'set','type','managed', capture_output=False])
+            subprocess.run(['sudo','iw',interface,'set','type','managed'], capture_output=False)
             subprocess.run(['sudo','ip','link','set',interface,'up'], capture_output=False)
             time.sleep(2)
             subprocess.run(['sudo','systemctl','restart','NetworkManager'], capture_output=True)
