@@ -50,7 +50,8 @@ class NetworkScanner:
                         'encryption': parts[5].strip()
                     }
                     # only then append this network
-                    networks.append(nework)
+                    if network['essid']:
+                        networks.append(nework)
             
             # Cleanup the scan file
             if os.path.exists(filename):

@@ -10,7 +10,7 @@ from modules.scanner import NetworkScanner
 class Kymatoscopos:
     def __init__(self):
         self.monitor = MonitorManager()
-        self.scanner = NetworkScanner()
+        self.scanner = NetworkScanner(self.monitor)
 #        self.handshake = HandshakeCapture()
 #        self.cracker = HandshakeCracker()
         self.current_interface = "wlan0"
