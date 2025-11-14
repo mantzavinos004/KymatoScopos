@@ -52,6 +52,7 @@ class Kymatoscopos:
             print("11. Attack WPS Network")
             print("12. Atomic Bomb (Advanced)")
             print("13. Change your MAC Address")
+            print("14. Wi-Fi Password Strength Checker")
             print("0.  Exit")
             print("="*50)
             
@@ -95,7 +96,7 @@ class Kymatoscopos:
         interface = input("[?] Enter your interface (default: wlan0): ").strip() or "wlan0"
         
         if self.monitor.start_monitor(interface):
-            self.current_interface = f"{interface}mon"
+            self.current_interface = interface
             print(f"[+] Monitor Mode started on {self.current_interface}")
         else:
             print(f"[-] Failed to start monitor mode. Make sure your equipment has monitor mode capabilities")

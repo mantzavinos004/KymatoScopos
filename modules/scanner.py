@@ -7,7 +7,11 @@ class NetworkScanner:
     def scan(self, interface, duration=10):
         """ Scan for nearby wireless networks """
         try:
-            print(f"[*] Scanning for {duration} seconds...")
+            if not self.monitor.check_monitor_status(interface):
+                print("[-] Interface is not in monitor mode! Please start it manually or with option 1.")
+                return []
+            
+            print(f"[*] Scanning for {duration} seconds on {interface}...")
             cmd = ['sudo','airodump-ng','--write','/tmp/kymatoscopos_scans','--output-format','csv',interface]
             process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             time.sleep(duration)
